@@ -9,7 +9,7 @@ For a person who has a thorough understanding of a language, writing a ‘simple
 This problem is countered in the paper [MUSS: Multilingual Unsupervised Sentence Simplification by Mining Paraphrases](https://github.com/facebookresearch/muss), 
 which, as the name suggests, can train a state of the art text simplification model with unlabelled data.
 
-This repository uses the model created in the paper and converts it to an easy to use model format (Pytorch, Hugging Face). It is then deployed using
+This repository takes the model created by the authors of the paper and converts it to an easy-to-use model format (Pytorch, Hugging Face). It is then deployed using
 Streamlit, to show off its capabilities.
 
 ## Usage
