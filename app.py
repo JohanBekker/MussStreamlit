@@ -93,7 +93,7 @@ treedepth_ratio = col1.slider("Dependency tree depth ratio:", value=0.8)
 preprocessors = get_muss_preprocessors(length_ratio, replace_ratio, word_ratio, treedepth_ratio)
 composed_preprocessor = ComposedPreprocessor(preprocessors)
 
-text_a = c.text_input('Sentence to be simplified: (please have some patience, Streamlit servers are free..',
+text_a = c.text_input('Sentence to be simplified: (please have some patience, Streamlit servers are free..)',
                       value='This is an exquisite example sentence in which I am, exclusively, contemplating utter nonsense.',
                       max_chars=150)
 if text_a != '':
