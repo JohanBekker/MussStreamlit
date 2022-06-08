@@ -10,7 +10,8 @@ from torch.nn.parameter import Parameter
 
 st.set_page_config(page_title='Text simplifier', layout="wide")
 
-@st.cache(max_entries=2)
+
+@st.cache(max_entries=3)
 def get_muss_preprocessors(length=0.8, replace=0.8, word=0.8, tree=0.8):
     language = 'en'
     preprocessors_kwargs = {
@@ -29,6 +30,12 @@ def load_model():
     hf_model.eval()
     return hf_model
 
+from regex import Pattern
+from tokenizers import AddedToken
+@st.cache(hash_funcs={AddedToken: lambda _: None, Pattern: lambda _: None}, allow_output_mutation=True)
+def load_tokenizer():
+    return BartTokenizer.from_pretrained('facebook/bart-large')
+
 
 def clean_output(prediction):
     symbols = ['<s>', '</s>']
@@ -38,7 +45,7 @@ def clean_output(prediction):
 
 
 model = load_model()
-tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
+tokenizer = load_tokenizer()
 
 
 def tokenize_sentence(sentence, MAX_SEQUENCE_LENGTH=1024):
