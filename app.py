@@ -10,7 +10,7 @@ from torch.nn.parameter import Parameter
 
 st.set_page_config(page_title='Text simplifier', layout="wide")
 
-
+@st.cache(max_entries=2)
 def get_muss_preprocessors(length=0.8, replace=0.8, word=0.8, tree=0.8):
     language = 'en'
     preprocessors_kwargs = {
