@@ -39,11 +39,6 @@ greatly.
 
 The MUSS license is CC-BY-NC. See the [LICENSE](LICENSE) file for more details.
 
-## Authors
-
-* **Louis Martin** ([louismartincs@gmail.com](mailto:louismartincs@gmail.com))
-
-
 ## Citation
 
 If you use MUSS in your research, please cite [MUSS: Multilingual Unsupervised Sentence Simplification by Mining Paraphrases](https://arxiv.org/abs/2005.00352)
