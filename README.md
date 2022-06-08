@@ -6,14 +6,8 @@ For people who have cognitive disabilities or are not native speakers of a langu
 For this reason social instances with a large reach, like governmental instances, have to address people in a simple manner. 
 For a person who has a thorough understanding of a language, writing a ‘simple’ sentence can be challenging.
 
-This problem can be solved with the use of deep learning models, where especially the rise of the transformer architecture caused a massive 
-improvement in performance in natural language processing (NLP). The problem with deep learning models is the necessity for large quantities of labeled data.
-
 This problem is countered in the paper [MUSS: Multilingual Unsupervised Sentence Simplification by Mining Paraphrases](https://github.com/facebookresearch/muss), 
-which, as the name suggests, can train a state of the art text simplification model with unlabelled data. To implement this strategy for 
-the Dutch language, I forked the repository. As the author had acces to the Facebook supercomputer cluster, I made the necessary 
-alterations to the paraphrase mining code to make it work on my workstation with 32GB RAM and a RTX 2070 super 8GB. The training of the
-model is done on an Azure cloud VM using the Azure Python SDK. See Azure_mussNL.ipynb.
+which, as the name suggests, can train a state of the art text simplification model with unlabelled data.
 
 ## Usage
 
