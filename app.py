@@ -77,8 +77,12 @@ if st.sidebar.button("LinkedIn        "):
 
 c = st.container()
 c2 = st.container()
+c3 = st.container()
 
-col1, col2, col3 = c2.columns([3, 1, 1])
+loading_placeholder = c2.empty()
+
+c3.markdown("***")
+col1, col2, col3 = c3.columns([3, 1, 1])
 col1.subheader('Play around with the parameters and see the results!')
 col1.write("More information about the parameters can be found in the reference below.")
 length_ratio = col1.slider("Length ratio:", value=0.8)
@@ -89,13 +93,14 @@ treedepth_ratio = col1.slider("Dependency tree depth ratio:", value=0.8)
 preprocessors = get_muss_preprocessors(length_ratio, replace_ratio, word_ratio, treedepth_ratio)
 composed_preprocessor = ComposedPreprocessor(preprocessors)
 
-text_a = c.text_input('Sentence to be simplified:',
+text_a = c.text_input('Sentence to be simplified: (please have some patience, Streamlit servers are free..',
                       value='This is an exquisite example sentence in which I am, exclusively, contemplating utter nonsense.',
                       max_chars=150)
 if text_a != '':
-    text = simplify(text_a)
-    c.write(text)
-c.markdown("***")
+    with loading_placeholder:
+        with st.spinner("Please wait while the simplification is applied..."):
+            text = simplify(text_a)
+    c.success(text)
 
 st.markdown("***")
 st.markdown("#### Based on [MUSS: Multilingual Unsupervised Sentence Simplification by "
