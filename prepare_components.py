@@ -13,7 +13,7 @@ MODEL_DIR = Path('models/fairseq/')
 
 def download_extract_model(model_name = "muss_en_wikilarge_mined"):
     model_path = MODEL_DIR / model_name
-    if not model_path.exists():
+    if not (model_path / 'model.pt').exists():
         url = f'https://dl.fbaipublicfiles.com/muss/{model_name}.tar.gz'
         model_path.parent.mkdir(parents=True, exist_ok=True)
         download_and_extract(url, model_path)

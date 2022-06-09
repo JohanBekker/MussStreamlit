@@ -21,10 +21,10 @@ from preprocessing.preprocessors import ComposedPreprocessor
 def get_muss_preprocessors():
     language = 'en'
     preprocessors_kwargs = {
-        'LengthRatioPreprocessor': {'target_ratio': 0.55, 'use_short_name': False},
-        'ReplaceOnlyLevenshteinPreprocessor': {'target_ratio': 0.8, 'use_short_name': False},
-        'WordRankRatioPreprocessor': {'target_ratio': 0.8, 'language': language, 'use_short_name': False},
-        'DependencyTreeDepthRatioPreprocessor': {'target_ratio': 0.8, 'language': language, 'use_short_name': False},
+        'LengthRatioPreprocessor': {'target_ratio': 0.9, 'use_short_name': False},
+        'ReplaceOnlyLevenshteinPreprocessor': {'target_ratio': 0.75, 'use_short_name': False},
+        'WordRankRatioPreprocessor': {'target_ratio': 0.75, 'language': language, 'use_short_name': False},
+        'DependencyTreeDepthRatioPreprocessor': {'target_ratio': 0.7, 'language': language, 'use_short_name': False},
     }
     return get_preprocessors(preprocessors_kwargs)
 
@@ -32,8 +32,9 @@ def get_muss_preprocessors():
 preprocessors = get_muss_preprocessors()
 composed_preprocessor = ComposedPreprocessor(preprocessors)
 
-#sentence = 'Hi, this is an exquisite example sentence in which I am, exclusively, contemplating nonsense.'
-sentence = 'Effective altruism advocates using evidence to determine the most effective ways to benefit others.'
+# sentence = 'Hello! This is an exquisite example sentence in which I am, exclusively, contemplating utter nonsense. Effective altruism advocates using evidence to determine the most effective ways to benefit others.'
+sentence = 'Hello! This is an exquisite example sentence in which I am, exclusively, contemplating utter nonsense.'
+# sentence = 'Effective altruism advocates using evidence to determine the most effective ways to benefit others.'
 
 # pytorch_dump_folder_path = 'models/pytorch_bartmodel/'
 pytorch_dump_folder_path = 'models/half_precision/'
@@ -49,7 +50,7 @@ def tokenize_sentence(sentence):
     MAX_SEQUENCE_LENGTH = 1024
     return tokenizer(composed_preprocessor.encode_sentence(sentence), return_tensors="pt",
                      max_length=MAX_SEQUENCE_LENGTH,
-                     padding='max_length', add_special_tokens=False)
+                     padding='max_length', add_special_tokens=True)
 
 
 def clean_output(prediction):
@@ -62,7 +63,7 @@ inputs = tokenize_sentence(sentence)
 
 summaries = model.generate(**inputs,
                            num_beams=5,
-                            #max_length=1024,
+                            max_length=1024,#1024,
                             early_stopping=True,
                             decoder_start_token_id=model.config.decoder_start_token_id)
 

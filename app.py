@@ -11,8 +11,8 @@ from torch.nn.parameter import Parameter
 st.set_page_config(page_title='Text simplifier', layout="wide")
 
 
-@st.cache(max_entries=3)
-def get_muss_preprocessors(length=0.8, replace=0.8, word=0.8, tree=0.8):
+#@st.cache(max_entries=1)
+def get_muss_preprocessors(length=0.9, replace=0.75, word=0.75, tree=0.7):
     language = 'en'
     preprocessors_kwargs = {
         'LengthRatioPreprocessor': {'target_ratio': length, 'use_short_name': False},
@@ -51,13 +51,13 @@ tokenizer = load_tokenizer()
 def tokenize_sentence(sentence, MAX_SEQUENCE_LENGTH=1024):
     return tokenizer(composed_preprocessor.encode_sentence(sentence), return_tensors="pt",
                      max_length=MAX_SEQUENCE_LENGTH,
-                     padding='max_length', add_special_tokens=False)
+                     padding='max_length', add_special_tokens=True)
 
 
 def simplify(sentence):
     tokens = tokenize_sentence(sentence)
     tokenized_simplification = model.generate(**tokens, num_beams=4,
-                                              # max_length=(sum(tokens.attention_mask[0])//1.25), #early_stopping=False,
+                                              max_length=1024, early_stopping=False,
                                               decoder_start_token_id=model.config.decoder_start_token_id)
     return clean_output(tokenizer.decode(tokenized_simplification[0]))
 
@@ -92,17 +92,17 @@ c3.markdown("***")
 col1, col2, col3 = c3.columns([3, 1, 1])
 col1.subheader('Play around with the parameters and see the results!')
 col1.write("More information about the parameters can be found in the reference below.")
-length_ratio = col1.slider("Length ratio:", value=0.8)
-replace_ratio = col1.slider("Levenshtein replace ratio:", value=0.8)
-word_ratio = col1.slider("Wordrank ratio:", value=0.8)
-treedepth_ratio = col1.slider("Dependency tree depth ratio:", value=0.8)
+length_ratio = col1.slider("Length ratio:", value=0.9)
+replace_ratio = col1.slider("Levenshtein replace ratio:", value=0.75)
+word_ratio = col1.slider("Wordrank ratio:", value=0.75)
+treedepth_ratio = col1.slider("Dependency tree depth ratio:", value=0.7)
 
 preprocessors = get_muss_preprocessors(length_ratio, replace_ratio, word_ratio, treedepth_ratio)
 composed_preprocessor = ComposedPreprocessor(preprocessors)
 
 text_a = c.text_input('Sentence to be simplified: (please have some patience, Streamlit servers are free..)',
-                      value='This is an exquisite example sentence in which I am, exclusively, contemplating utter nonsense.',
-                      max_chars=150)
+                      value='Hello! This is an exquisite example sentence in which I am, exclusively, contemplating utter nonsense.',
+                      max_chars=200)
 if text_a != '':
     with loading_placeholder:
         with st.spinner("Please wait while the simplification is applied..."):
