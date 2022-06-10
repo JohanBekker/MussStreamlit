@@ -32,7 +32,7 @@ def get_muss_preprocessors(length, replace, word, tree):
 #     return hf_model
 
 
-@st.cache(show_spinner=True, hash_funcs={Parameter: lambda _: None}, allow_output_mutation=True)
+# @st.cache(show_spinner=True, hash_funcs={Parameter: lambda _: None}, allow_output_mutation=True)
 def load_model():
     onnx_models_path = "models/onnx_quantized/"
     model_name = "pytorch_bartmodel"
