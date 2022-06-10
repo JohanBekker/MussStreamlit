@@ -43,7 +43,7 @@ from regex import Pattern
 from tokenizers import AddedToken
 
 
-@st.cache(hash_funcs={AddedToken: lambda _: None, Pattern: lambda _: None}, allow_output_mutation=True)
+# @st.cache(hash_funcs={AddedToken: lambda _: None, Pattern: lambda _: None}, allow_output_mutation=True)
 def load_tokenizer():
     return BartTokenizer.from_pretrained('facebook/bart-large')
 
