@@ -22,9 +22,9 @@ def get_muss_preprocessors():
     language = 'en'
     preprocessors_kwargs = {
         'LengthRatioPreprocessor': {'target_ratio': 0.9, 'use_short_name': False},
-        'ReplaceOnlyLevenshteinPreprocessor': {'target_ratio': 0.75, 'use_short_name': False},
+        'ReplaceOnlyLevenshteinPreprocessor': {'target_ratio': 0.65, 'use_short_name': False},
         'WordRankRatioPreprocessor': {'target_ratio': 0.75, 'language': language, 'use_short_name': False},
-        'DependencyTreeDepthRatioPreprocessor': {'target_ratio': 0.7, 'language': language, 'use_short_name': False},
+        'DependencyTreeDepthRatioPreprocessor': {'target_ratio': 0.4, 'language': language, 'use_short_name': False},
     }
     return get_preprocessors(preprocessors_kwargs)
 
@@ -71,6 +71,21 @@ outp = tokenizer.decode(summaries[0])
 cleaned_output = clean_output(outp)
 print(cleaned_output)
 
+
+from fastBart import get_onnx_model
+model_onnx = get_onnx_model(model_name="pytorch_bartmodel", onnx_models_path="models/onnx_quantized/")
+
+summaries = model_onnx.generate(**inputs,
+                           num_beams=5,
+                            max_length=1024,
+                            early_stopping=True,
+                            decoder_start_token_id=model_onnx.config.decoder_start_token_id)
+
+outp = tokenizer.decode(summaries[0])
+cleaned_output = clean_output(outp)
+print(cleaned_output)
+
+
 # x = [2, 0, 2387, 964, 32, 3035, 6, 53, 51, 3529, 350, 171, 33237, 8, 33, 10, 319, 9, 4696, 11, 49, 689, 4, 2]
 # y = [2, 2387, 964, 32, 3035, 6, 53, 51, 3529, 350, 171, 33237, 8, 4076, 350, 203, 3766, 4, 2]
 
@@ -81,10 +96,10 @@ print(cleaned_output)
 # onnx_file_path = 'onnx\\model.onnx'
 # onnx_file_path = "onnx_optimized\\optimized_bart.onnx"
 # onnx_file_path = "onnx_optimized\\bart_onnx.onnx"
-onnx_file_path = "quant\\bart_quantized.onnx"
-num_beams = 5
-max_length = 1024
-decoder_start_token_id = 2
+# onnx_file_path = "quant\\bart_quantized.onnx"
+# num_beams = 5
+# max_length = 1024
+# decoder_start_token_id = 2
 
 #ort_sess = None
 #with torch.no_grad():

@@ -1,4 +1,6 @@
 from pathlib import Path
+import os
+import shutil
 
 # from preprocessing.utils.helpers import log_action
 from preprocessing.utils.download_extract import download_and_extract
@@ -7,7 +9,8 @@ from preprocessing.utils.download_extract import download_and_extract
 from preparation.convert_bart_original_pytorch_checkpoint_to_pytorch import convert_bart_checkpoint
 # from preparation.run_onnx_exporter import convert_onnx
 
-from preparation.convert_to_half_precision import Convert2HalfPrecision
+from fastBart import export_and_get_onnx_model
+
 
 MODEL_DIR = Path('models/fairseq/')
 
@@ -33,11 +36,16 @@ if not (Path(pytorch_dump_folder_path) / 'pytorch_model.bin').exists():
     convert_bart_checkpoint(fairseq_path, pytorch_dump_folder_path, hf_checkpoint_name=hf_config)
 
 
-half_precision_path = 'models/half_precision/'
-half_precision_model_name = 'pytorch_model.bin'
-if not (Path(half_precision_path) / half_precision_model_name).exists():
-    Path(half_precision_path).mkdir(parents=True, exist_ok=True)
-    Convert2HalfPrecision(pytorch_dump_folder_path, half_precision_path)
+
+model_name = "models/pytorch_bartmodel/"
+custom_output_path = "models/onnx_quantized/"
+
+shutil.copy((Path(pytorch_dump_folder_path) / 'config.json'), custom_output_path)
+
+Path(custom_output_path).mkdir(parents=True, exist_ok=True)
+if not ".onnx" in ' '.join(os.listdir(custom_output_path)):
+    export_and_get_onnx_model(model_name, custom_output_path)
+
 
 
 # Run the conversion to onnx filetype. To parameters, navigate to preparation.run_onnx_exporter and change
