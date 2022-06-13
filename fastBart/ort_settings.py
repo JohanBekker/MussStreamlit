@@ -17,7 +17,7 @@ def get_onnx_runtime_sessions(
     default: bool = True,
     opt_level: int = 99,
     parallel_exe_mode: bool = True,
-    n_threads: int = 0,
+    n_threads: int = 1,
     provider=[
         "CPUExecutionProvider",
     ],
@@ -51,6 +51,9 @@ def get_onnx_runtime_sessions(
         session_option = SessionOptions()
         session_option.enable_mem_pattern = False
         session_option.enable_cpu_mem_arena = False
+        session_option.intra_op_num_threads = n_threads
+        session_option.inter_op_num_threads = n_threads
+        session_option.graph_optimization_level = GraphOptimizationLevel.ORT_DISABLE_ALL
 
         encoder_sess = InferenceSession(str(path_to_encoder), session_option)
 

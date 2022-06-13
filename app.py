@@ -31,11 +31,11 @@ def load_model():
     return get_onnx_model(model_name, onnx_models_path)
 
 
-# from regex import Pattern
-# from tokenizers import AddedToken
+from regex import Pattern
+from tokenizers import AddedToken
 
 
-# @st.cache(hash_funcs={AddedToken: lambda _: None, Pattern: lambda _: None}, allow_output_mutation=True)
+@st.cache(hash_funcs={AddedToken: lambda _: None, Pattern: lambda _: None}, allow_output_mutation=True)
 def load_tokenizer():
     return BartTokenizer.from_pretrained('facebook/bart-large')
 
@@ -59,11 +59,11 @@ def tokenize_sentence(sentence, MAX_SEQUENCE_LENGTH=1024):
 
 def simplify(sentence):
     tokens = tokenize_sentence(sentence)
-    # tokenized_simplification = model.generate(**tokens, num_beams=4,
-    #                                           max_length=1024, early_stopping=True,
-    #                                           decoder_start_token_id=model.config.decoder_start_token_id)
-    # return clean_output(tokenizer.decode(tokenized_simplification[0]))
-    return clean_output(tokenizer.decode(tokens['input_ids'][0]))
+    tokenized_simplification = model.generate(**tokens, num_beams=4,
+                                              max_length=1024, early_stopping=True,
+                                              decoder_start_token_id=model.config.decoder_start_token_id)
+    return clean_output(tokenizer.decode(tokenized_simplification[0]))
+    # return clean_output(tokenizer.decode(tokens['input_ids'][0]))
 
 
 def open_url(url):
