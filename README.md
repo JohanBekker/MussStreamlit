@@ -1,6 +1,8 @@
-# Streamlit Deployment of Multilingual Unsupervised Sentence Simplification
+# Streamlit Deployment of Multilingual Unsupervised Sentence Simplification (Dutch)
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/johanbekker/mussstreamlit/app.py)
+
+Want to train your own text simplification model? Check out how I did it in my [Github page](https://github.com/JohanBekker/MussStreamlit)
 
 For people who have cognitive disabilities or are not native speakers of a language long and complex sentences can be hard to comprehend. 
 For this reason social instances with a large reach, like governmental instances, have to address people in a simple manner. 
@@ -14,8 +16,13 @@ Streamlit, to show off its capabilities.
 
 ## Usage
 
-Clone the repository and install the dependencies in requirements.txt. To download and process the original
-model, run prepare_components.py. This will download and convert the models to the default directories.
+Clone the repository and install the dependencies in requirements.txt. If you download the supplied Dutch simplification
+model (MarianMT), you can use it straight away. If you want to use an English text simplifier instead, code is supplied which
+downloads the original model trained by the paper's authors. It is then converted from the Fairseq framework to
+PyTorch/HuggingFace and Onnx, after which you can choose which framework to use.
+
+To download and process the original model, run prepare_components.py. This will download and convert the models to the 
+default directories.
 
 ```
 python prepare_components.py
@@ -25,18 +32,39 @@ To launch the app locally on your system, run the following command while an env
 is active:
 
 ```
-streamlit run [LOCATION]]/app.py
+streamlit run app.py
 ```
+
+## Docker
+
+To build this app in a Docker image, run the following bash command: 
+
+```bash
+docker build -t mussnlstreamlit:latest -f docker/Dockerfile .
+```
+
+When the image is built, run it in a container:
+
+```bash
+docker run -p 8501:8501 mussnlstreamlit:latest
+```
+
+Now you can reach your application in your webbrowser at http://localhost:8501/. Do note that if you change the
+application dependencies and/or the directory of the model and tokenizer files, the Dockerfile needs to be changed
+accordingly (docker/Dockerfile).
 
 ## Speeding up the model
 
-With prepare_components.py, the original fairseq model is downloaded and consequenly converted into a pytorch model
-with architecture BartForConditionalGeneration (Hugging Face). The model is saved as a half precision model of approximately 800mb
-(Streamlit has a 1GB app size limit).
+With prepare_components.py, the original fairseq model is downloaded and consequently converted into a PyTorch model
+with architecture BartForConditionalGeneration (Hugging Face).
 
-Further work was done to convert the model to onnx model type, with the idea of model quantization using Hugging Face Optimum, but 
-sequence-to-sequence language models were not yet supported for quantization. In future work this is expected to speed up model inference
-greatly.
+After this the model is converted to the Onnx model type, after which quantization is applied to improve the inference
+speed. The Seq2Seq model type is not fully supported though, and to make the conversion to Onnx work the model had to be
+split into three different components.
+
+Quantization reduces the model size to 775MB, down from the 1.6GB PyTorch model, but because the Onnx model consists of
+three parts, three different Onnxruntime inference sessions have to be created, which is very memory hungry and thus
+this quantized model still exceeds the 1GB limit of Streamlit cloud. Locally it runs fine though.
 
 ## License
 

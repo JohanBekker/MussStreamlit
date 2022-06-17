@@ -42,8 +42,8 @@ pytorch_dump_folder_path = 'models/half_precision/'
 
 
 tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
-model = BartForConditionalGeneration.from_pretrained(pytorch_dump_folder_path)
-model.eval()
+# model = BartForConditionalGeneration.from_pretrained(pytorch_dump_folder_path)
+# model.eval()
 
 
 def tokenize_sentence(sentence):
@@ -61,19 +61,26 @@ def clean_output(prediction):
 
 inputs = tokenize_sentence(sentence)
 
-summaries = model.generate(**inputs,
-                           num_beams=5,
-                            max_length=1024,#1024,
-                            early_stopping=True,
-                            decoder_start_token_id=model.config.decoder_start_token_id)
+# summaries = model.generate(**inputs,
+#                            num_beams=5,
+#                             max_length=1024,#1024,
+#                             early_stopping=True,
+#                             decoder_start_token_id=model.config.decoder_start_token_id)
 
-outp = tokenizer.decode(summaries[0])
-cleaned_output = clean_output(outp)
-print(cleaned_output)
+# outp = tokenizer.decode(summaries[0])
+# cleaned_output = clean_output(outp)
+# print(cleaned_output)
+
+def load_model():
+    onnx_models_path = "models/onnx_quantized/"
+    model_name = "pytorch_bartmodel"
+    return get_onnx_model(model_name, onnx_models_path)
 
 
 from fastBart import get_onnx_model
-model_onnx = get_onnx_model(model_name="pytorch_bartmodel", onnx_models_path="models/onnx_quantized/")
+#model_onnx = get_onnx_model(model_name="pytorch_bartmodel", onnx_models_path="models/onnx_quantized/")
+
+model_onnx = load_model()
 
 summaries = model_onnx.generate(**inputs,
                            num_beams=5,

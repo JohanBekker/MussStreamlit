@@ -1,6 +1,8 @@
 torch==1.11.0
 fairseq==0.10.0
 transformers==4.19.2
+sentencepiece==0.1.96
+sacremoses==0.0.53
 onnx==1.11.0
 onnxruntime==1.11.1
 progress==1.6
