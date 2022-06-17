@@ -2,7 +2,7 @@
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/johanbekker/mussstreamlit/app.py)
 
-Do you want to train your own text simplification model? Check out how I did it in my [Github page](https://github.com/JohanBekker/MussStreamlit)!
+Do you want to train your own text simplification model? Check out how I did it in my [Github page](https://github.com/JohanBekker/mussNL)!
 
 For people who have cognitive disabilities or are not native speakers of a language long and complex sentences can be hard to comprehend. 
 For this reason social instances with a large reach, like governmental instances, have to address people in a simple manner. 
