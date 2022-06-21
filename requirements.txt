@@ -7,6 +7,7 @@ onnx==1.11.0
 onnxruntime==1.11.1
 progress==1.6
 streamlit==1.10.0
+bokeh==2.4.1
 tqdm==4.64.0
 requests==2.27.1
 regex==2022.4.24

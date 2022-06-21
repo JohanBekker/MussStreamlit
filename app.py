@@ -1,4 +1,5 @@
 import streamlit as st
+from bokeh.models.widgets import Div
 import webbrowser
 
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
@@ -84,11 +85,26 @@ m = st.markdown(
 
 st.sidebar.markdown("<h1 style='text-align: center; color: black;'>Check me out!</h1>", unsafe_allow_html=True)
 if st.sidebar.button("Portfolio        "):
-    open_url('https://www.datascienceportfol.io/JohanBekker')
+    js = "window.open('https://www.datascienceportfol.io/JohanBekker')"
+    # js = "window.location.href = 'https://www.datascienceportfol.io/JohanBekker'"  # Current tab
+    html = '<img src onerror="{}">'.format(js)
+    div = Div(text=html)
+    st.bokeh_chart(div)
+    # open_url('https://www.datascienceportfol.io/JohanBekker')
 if st.sidebar.button("GitHub        "):
-    open_url('https://github.com/JohanBekker')
+    js = "window.open('https://github.com/JohanBekker')"  # New tab or window
+    # js = "window.location.href = 'https://share.streamlit.io/johanbekker/caststreamlit/main/app.py'"  # Current tab
+    html = '<img src onerror="{}">'.format(js)
+    div = Div(text=html)
+    st.bokeh_chart(div)
+    # open_url('https://github.com/JohanBekker')
 if st.sidebar.button("LinkedIn        "):
-    open_url('https://www.linkedin.com/in/johan-bekker-3501a6168/')
+    js = "window.open('https://www.linkedin.com/in/johan-bekker-3501a6168/')"
+    # js = "window.location.href = 'https://www.linkedin.com/in/johan-bekker-3501a6168/'"  # Current tab
+    html = '<img src onerror="{}">'.format(js)
+    div = Div(text=html)
+    st.bokeh_chart(div)
+    # open_url('https://www.linkedin.com/in/johan-bekker-3501a6168/')
 
 c = st.container()
 c2 = st.container()
