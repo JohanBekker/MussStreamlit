@@ -14,7 +14,26 @@ from preprocessing.utils.helpers import log_action
 def untar(compressed_path, output_dir):
     filename = os.path.basename(compressed_path)
     with tarfile.open(compressed_path) as f:
-        f.extractall(output_dir)
+        def is_within_directory(directory, target):
+            
+            abs_directory = os.path.abspath(directory)
+            abs_target = os.path.abspath(target)
+        
+            prefix = os.path.commonprefix([abs_directory, abs_target])
+            
+            return prefix == abs_directory
+        
+        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+        
+            for member in tar.getmembers():
+                member_path = os.path.join(path, member.name)
+                if not is_within_directory(path, member_path):
+                    raise Exception("Attempted Path Traversal in Tar File")
+        
+            tar.extractall(path, members, numeric_owner=numeric_owner) 
+            
+        
+        safe_extract(f, output_dir)
     dirs1 = os.listdir(output_dir)
     dirs = os.listdir(output_dir / dirs1[0])
     # Move model files to the output_dir from the directory created by untar
